@@ -34,93 +34,169 @@ function Enemy (name){
     this.xNoiseOffset = random(0, 2000);
     this.yNoiseOffset = random(2000, 4000);
 
-    this.move = function(EXP, player){
+    this.goToNearestEXP = function(EXP){
+        var smallestX = EXP[0].x, smallestY = EXP[0].y;
+        for (var i = 0; i < EXP.length; i++){
+            if (dist (this.x, this.y, EXP[i].x, EXP[i].y) < dist(this.x, this.y, smallestX, smallestY)){
+                smallestX = EXP[i].x;
+                smallestY = EXP[i].y;
+            }
+        }
+        //chase after the nearest EXP;
+        if (this.x < smallestX){
+            this.x += 1;
+        }
+        if (this.x > smallestX){
+            this.x -= 1;
+        }
+        if (this.y < smallestY){
+            this.y += 1;
+        }
+        if (this.y > smallestY){
+            this.y -= 1;
+        }
+    };
 
 
 
+    this.goToNearestEXPNotNearPlayer = function(EXP){
+        var smallestX = EXP[0].x, smallestY = EXP[0].y;
+        var foundNearest = true;
+        for (var i = 0; i < EXP.length; i++){
+            if (dist (this.x, this.y, EXP[i].x, EXP[i].y) < dist(this.x, this.y, smallestX, smallestY)
+                &&
+            dist(player.x, player.y, EXP[i].x, EXP[i].y) > (player.size +30)  ){
+                smallestX = EXP[i].x;
+                smallestY = EXP[i].y;
+            }
+        }
+        //chase after the nearest EXP;
+        if (this.x < smallestX){
+            this.x += 1;
+        }
+        if (this.x > smallestX){
+            this.x -= 1;
+        }
+        if (this.y < smallestY){
+            this.y += 1;
+        }
+        if (this.y > smallestY){
+            this.y -= 1;
+        }
+    };
+
+
+    this.previousX = this.x;
+    this.previousY = this.y;
+    this.secondPreviousX = this.previousX;
+    this.secondPreviousY = this.previousY;
+
+    this.checkBlocked = function (){
+        if (this.x == this.secondPreviousX && this.y == this.secondPreviousY){
+            return true;
+        }
+        return false;
+    };
+
+    //if blocked, use perlin noise??
+
+    this.move = function(EXP, player, Enemy) {
+        console.log(this.x, this.secondPreviousX, this.y, this.secondPreviousY);
+        this.secondPreviousX = this.previousX;
+        this.secondPreviousY = this.previousY;
+        this.previousX = this.x;
+        this.previousY = this.y;
         //NO WRAP-AROUNDS!
-        if (this.x > width){
+        if (this.x > width) {
+            // this.previousX = this.x;
             this.x = width;
         }
-        if (this.x < 0){
+        if (this.x < 0) {
+            // this.previousX = this.x;
             this.x = 0;
         }
-        if (this.y > height){
+        if (this.y > height) {
+            // this.previousY = this.y;
             this.y = height;
         }
-        if (this.y < 0){
+        if (this.y < 0) {
+            // this.previousY = this.y;
             this.y = 0;
         }
 
-
-        //A better one:
-        //Computer auto moves. If smaller than player, move away. Within that, find EXP.
-        // If bigger than player, move however it wants. OR towards player???
-        //But that'll be too difficult
-
-
-        //--------- inefficent implementation ---------
-        //1) If enemy comes cross user within a certain dist, and user is smaller, enemy should chase user until that dist runs out.
-        //2) Else, enemy runs away till certain dist.
-        //3) EXP-consumption should be second priority -- the first two should be priotized. Also, no need for perlin noise. Just iterate thru array and find the nearest EXP.
-
-        //if it's close to EXP or user
-        //move depending on what it is
-        if (dist(this.x ,this.y, player.x, player.y) < 80){
-            //if player size is smaller, chase after it
-            if (player.size < this.size){
-                if (this.x < player.x){
-                    this.x += 1;
-                }
-                if (this.x > player.x){
+        //if enemy size is less than player's size
+        //never go to player's direction when near
+        if (this.size < player.size) {
+            if (dist(this.x, this.y, player.x, player.y) <= (player.size + 10)) {
+                if (this.x < player.x) {
+                    // this.previousX = this.x;
                     this.x -= 1;
                 }
-                if (this.y < player.y){
+                if (this.x > player.x) {
+                    // this.previousX = this.x;
+                    this.x += 1;
+
+                }
+                if (this.y < player.y) {
+                    // this.previousY = this.y;
+                    this.y -= 1;
+                }
+                if (this.y > player.x) {
+                    // this.previousY = this.y;
                     this.y += 1;
                 }
-                if (this.y > player.x){
-                    this.y -= 1;
+                if (this.checkBlocked() == true){
+                    console.log("blocked! ", this.x, this.y);
+                    var xMove = map(noise(this.xNoiseOffset), 0, 1, -1, 1);
+                    var yMove = map(noise(this.yNoiseOffset), 0, 1, -1, 1);
+                    this.x += xMove;
+                    this.y += yMove;
+                    this.xNoiseOffset += 0.01;
+                    this.yNoiseOffset += 0.01;
+
+                    //if you are trapped BOTTOM LEFT
+                    // if (this.x < 250 && this.y < 250) {
+                    //     this.x -=1;
+                    //     this.y +=1;
+                    // }
                 }
             }
-            //else if other size is bigger, run
             else {
-                if (this.x < player.x){
-                    this.x -= 1;
-                }
-                if (this.x > player.x){
-                    this.x += 1;
-                }
-                if (this.y < player.y){
-                    this.y -= 1;
-                }
-                if (this.y > player.x){
-                    this.y += 1;
-                }
+                this.goToNearestEXPNotNearPlayer(EXP);
             }
         }
-        else {
-            var smallestX = EXP[0].x, smallestY = EXP[0].y;
-            for (var i = 0; i < EXP.length; i++){
-                if (dist (this.x, this.y, EXP[i].x, EXP[i].y) < dist(this.x, this.y, smallestX, smallestY)){
-                    smallestX = EXP[i].x;
-                    smallestY = EXP[i].y;
+        //if enemy size is larger than player's size
+        else if (this.size > player.size) {
+            //and it's within a certain dist from player
+            //chase after it
+            if (dist(this.x, this.y, player.x, player.x) > (player.size + 10) ){
+                if (this.x < player.x) {
+                    // this.previousX = this.x;
+                    this.x += 1;
+                }
+                if (this.x > player.x) {
+                    // this.previousX = this.x;
+                    this.x -= 1;
+                }
+                if (this.y < player.y) {
+                    // this.previousY = this.y;
+                    this.y += 1;
+                }
+                if (this.y > player.x) {
+                    // this.previousY = this.y;
+                    this.y -= 1;
                 }
             }
-            //chase after the nearest EXP;
-            if (this.x < smallestX){
-                this.x += 1;
+            //if it's not within dist
+            //get nearest EXP
+            else {
+                this.goToNearestEXP(EXP);
             }
-            if (this.x > smallestX){
-                this.x -= 1;
-            }
-            if (this.y < smallestY){
-                this.y += 1;
-            }
-            if (this.y > smallestY){
-                this.y -= 1;
-            }
+
         }
     };
+
+
 
     this.checkHit = function(other){
         if (dist(this.x, this.y, other.x, other.y) < (this.size/2)){
@@ -143,7 +219,7 @@ function Enemy (name){
         this.r = random(255);
         this.g = random(255);
         this.b = random(255);
-    }
+    };
 
 
 
