@@ -1,5 +1,6 @@
 
 var player;
+var enemy;
 var EXP = [];
 
 function preload(){
@@ -7,10 +8,12 @@ function preload(){
     for (var i = 0; i < 25; i++){
         EXP.push(new Experience());
     }
+    enemy = new Enemy ("enemy");
 }
 
 
 function setup() {
+    noiseDetail(24);
     createCanvas(500, 500);
 }
 
@@ -19,10 +22,16 @@ function draw() {
 
     for (var i = 0; i < EXP.length; i++){
         EXP[i].display();
+        enemy.move(EXP[i]);
         if (player.checkHit(EXP[i]) == true){
             EXP[i].respawn();
         }
+        if (enemy.checkHit(EXP[i]) == true){
+            EXP[i].respawn();
+        }
     }
+    enemy.move(player);
+    enemy.display();
     player.move();
     player.display();
 

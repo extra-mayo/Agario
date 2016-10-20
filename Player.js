@@ -9,6 +9,9 @@ function Player (name){
     //set up name
     this.name = name;
 
+    //points
+    this.points = 0;
+
     //position : start off somewhere random in map
     this.x = random(0, 500);
     this.y = random(0, 500);
@@ -24,9 +27,13 @@ function Player (name){
 
     this.display = function(){
         imageMode(CENTER);
-        noStroke();
+        smooth();
+        strokeCap(ROUND);
+        strokeWeight(5);
+        stroke(this.r-20, this.g-20, this.b-20);
         fill(this.r, this.g, this.b);
         ellipse(this.x, this.y, this.size, this.size);
+        noStroke();
         fill(0);
         textAlign(CENTER);
         text(this.name, this.x, this.y);
@@ -63,7 +70,7 @@ function Player (name){
         if (this.y < 0){
             this.y = 0;
         }
-        this.updateSpeed();
+        // this.updateSpeed();
     };
 
     this.checkHit = function(other){
@@ -74,6 +81,7 @@ function Player (name){
             else {
                 //OTHER IS DELETED
                 this.size++;
+                this.points++;
                 return true;
             }
         }
@@ -81,9 +89,7 @@ function Player (name){
 
     this.speed = 5;
 
-    this.updateSpeed = function(){
-        //BASED ON SIZE!
-    }
+
 
 
 }
