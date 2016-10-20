@@ -34,7 +34,7 @@ function Enemy (name){
     this.xNoiseOffset = random(0, 2000);
     this.yNoiseOffset = random(2000, 4000);
 
-    this.move = function(other){
+    this.move = function(EXP, player){
 
 
 
@@ -52,50 +52,73 @@ function Enemy (name){
             this.y = 0;
         }
 
+
+        //A better one:
+        //Computer auto moves. If smaller than player, move away. Within that, find EXP.
+        // If bigger than player, move however it wants. OR towards player???
+        //But that'll be too difficult
+
+
+        //--------- inefficent implementation ---------
+        //1) If enemy comes cross user within a certain dist, and user is smaller, enemy should chase user until that dist runs out.
+        //2) Else, enemy runs away till certain dist.
+        //3) EXP-consumption should be second priority -- the first two should be priotized. Also, no need for perlin noise. Just iterate thru array and find the nearest EXP.
+
         //if it's close to EXP or user
         //move depending on what it is
-        if (dist(this.x ,this.y, other.x, other.y) < (this.size *4)){
-            //if other size is smaller, chase after it
-            if (other.size < this.size){
-                if (this.x < other.x){
+        if (dist(this.x ,this.y, player.x, player.y) < 80){
+            //if player size is smaller, chase after it
+            if (player.size < this.size){
+                if (this.x < player.x){
                     this.x += 1;
                 }
-                if (this.x > other.x){
+                if (this.x > player.x){
                     this.x -= 1;
                 }
-                if (this.y < other.y){
+                if (this.y < player.y){
                     this.y += 1;
                 }
-                if (this.y > other.x){
+                if (this.y > player.x){
                     this.y -= 1;
                 }
             }
             //else if other size is bigger, run
             else {
-                if (this.x < other.x){
+                if (this.x < player.x){
                     this.x -= 1;
                 }
-                if (this.x > other.x){
+                if (this.x > player.x){
                     this.x += 1;
                 }
-                if (this.y < other.y){
+                if (this.y < player.y){
                     this.y -= 1;
                 }
-                if (this.y > other.x){
+                if (this.y > player.x){
                     this.y += 1;
                 }
             }
         }
         else {
-            console.log("not close");
-            //Perlin noise movement
-            var xMovement = map(noise(this.xNoiseOffset), 0, 1, -1, 1);
-            var yMovement = map(noise(this.yNoiseOffset), 0, 1, -1, 1);
-            this.xNoiseOffset += 0.01;
-            this.yNoiseOffset += 0.1;
-
-            this.x += xMovement;
-            this.y += yMovement;
+            var smallestX = EXP[0].x, smallestY = EXP[0].y;
+            for (var i = 0; i < EXP.length; i++){
+                if (dist (this.x, this.y, EXP[i].x, EXP[i].y) < dist(this.x, this.y, smallestX, smallestY)){
+                    smallestX = EXP[i].x;
+                    smallestY = EXP[i].y;
+                }
+            }
+            //chase after the nearest EXP;
+            if (this.x < smallestX){
+                this.x += 1;
+            }
+            if (this.x > smallestX){
+                this.x -= 1;
+            }
+            if (this.y < smallestY){
+                this.y += 1;
+            }
+            if (this.y > smallestY){
+                this.y -= 1;
+            }
         }
     };
 
@@ -111,6 +134,15 @@ function Enemy (name){
                 return true;
             }
         }
+    };
+
+    this.respawn = function(){
+        this.x = random(500);
+        this.y = random(500);
+        this.size = random(6, 20);
+        this.r = random(255);
+        this.g = random(255);
+        this.b = random(255);
     }
 
 

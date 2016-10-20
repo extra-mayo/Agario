@@ -13,7 +13,7 @@ function preload(){
 
 
 function setup() {
-    noiseDetail(24);
+    // noiseDetail(24);
     createCanvas(500, 500);
 }
 
@@ -22,7 +22,6 @@ function draw() {
 
     for (var i = 0; i < EXP.length; i++){
         EXP[i].display();
-        enemy.move(EXP[i]);
         if (player.checkHit(EXP[i]) == true){
             EXP[i].respawn();
         }
@@ -30,7 +29,10 @@ function draw() {
             EXP[i].respawn();
         }
     }
-    enemy.move(player);
+    if (enemy.checkHit(player) == true){
+        //PLAYER LOSES??
+    }
+    enemy.move(EXP, player);
     enemy.display();
     player.move();
     player.display();
