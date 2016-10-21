@@ -106,6 +106,7 @@ function Enemy (name){
         this.secondPreviousY = this.previousY;
         this.previousX = this.x;
         this.previousY = this.y;
+
         //NO WRAP-AROUNDS!
         if (this.x > width) {
             // this.previousX = this.x;
