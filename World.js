@@ -52,5 +52,8 @@ function World(){
         if (this.offsetY < -250 ){
             this.offsetY = -250;
         }
-    }
+    };
+
+
+
 }

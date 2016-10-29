@@ -23,7 +23,7 @@ function Player (name, world){
     this.g = random(255);
     this.b = random(255);
 
-    this.speed = 10;
+    this.speed = 3;
 
     this.display = function(){
         imageMode(CENTER);
@@ -41,7 +41,7 @@ function Player (name, world){
     };
 
     this.move = function(){
-        console.log("new positoin: " + this.xWorldPos + " " + this.yWorldPos );
+        // console.log("new positoin: " + this.xWorldPos + " " + this.yWorldPos );
         //LEFT
         if (keyIsDown(65)){
             this.xWorldPos -= this.speed;
@@ -82,7 +82,7 @@ function Player (name, world){
             }
             else {
                 //OTHER IS DELETED
-                this.size++;
+                this.size+= other.size;
                 this.points++;
                 return true;
             }
