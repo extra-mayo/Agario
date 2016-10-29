@@ -18,14 +18,14 @@ function World(){
         //But there will be 30 rows and columns.
         //Why?
         //When player reaches top, we still want canvas to display tile images in lieu of displaying default background.
-        for (var row = -15; row < 20; row ++){
-            for (var col = -15; col < 20; col++){
+        //do -15, 20
+        for (var row = 0; row < 11; row ++){
+            for (var col = 0; col < 11; col++){
                 image(tile, col*this.tileSize, row*this.tileSize, this.tileSize, this.tileSize);
             }
         }
         pop();
     };
-
 
 
     //move map based on player's position
@@ -42,15 +42,15 @@ function World(){
         }
     };
     this.moveUp = function(val){
-        this.offsetY -= val;
-        if (this.offsetY < -250 ){
-            this.offsetY = -250;
-        }
-    };
-    this.moveDown = function(val){
         this.offsetY += val;
         if (this.offsetY > 250 ){
             this.offsetY = 250;
+        }
+    };
+    this.moveDown = function(val){
+        this.offsetY -= val;
+        if (this.offsetY < -250 ){
+            this.offsetY = -250;
         }
     }
 }

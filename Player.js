@@ -11,6 +11,10 @@ function Player (name, world){
     this.x = 250;
     this.y = 250;
 
+    //Player's position based on world
+    this.xWorldPos = 250;
+    this.yWorldPos = 250;
+
     //size of player
     this.size = 10;
 
@@ -19,7 +23,7 @@ function Player (name, world){
     this.g = random(255);
     this.b = random(255);
 
-    this.speed = 1;
+    this.speed = 10;
 
     this.display = function(){
         imageMode(CENTER);
@@ -37,27 +41,40 @@ function Player (name, world){
     };
 
     this.move = function(){
-        //RIGHT
+        console.log("new positoin: " + this.xWorldPos + " " + this.yWorldPos );
+        //LEFT
         if (keyIsDown(65)){
-            // this.x -= this.speed;
+            this.xWorldPos -= this.speed;
+            if (this.xWorldPos < 0){
+                this.xWorldPos = 0;
+            }
             this.world.moveRight(this.speed);
         }
-        //LEFT
+        //RIGHT
         if (keyIsDown(68)){
-            // this.x += this.speed;
+            this.xWorldPos += this.speed;
+            if (this.xWorldPos > width){
+                this.xWorldPos = width;
+            }
             this.world.moveLeft(this.speed);
         }
-        //DOWN
-        if (keyIsDown(87)){
-            // this.y -= this.speed;
-            this.world.moveDown(this.speed);
-        }
         //UP
-        if (keyIsDown(83)){
-            // this.y += this.speed;
+        if (keyIsDown(87)){
+            this.yWorldPos -= this.speed;
+            if (this.yWorldPos < 0){
+                this.yWorldPos = 0;
+            }
             this.world.moveUp(this.speed);
         }
-    }
+        //DOWN
+        if (keyIsDown(83)){
+            this.yWorldPos += this.speed;
+            if (this.yWorldPos > height){
+                this.yWorldPos = height;
+            }
+            this.world.moveDown(this.speed);
+        }
+    };
     this.checkHit = function(other){
         if (dist(this.x, this.y, other.x, other.y) < (this.size/2)){
             if (this.size < other.size){
