@@ -74,6 +74,18 @@ function Player (name, world){
             }
             this.world.moveDown(this.speed);
         }
+
+        for (var i = 0; i < EXP.length; i++){
+            if (this.checkHit(EXP[i]) == true){
+                EXP[i].respawn();
+            }
+        }
+
+        for (var i = 0; i < enemy.length; i++){
+            if (this.checkHit(enemy[i]) == true){
+                //TODO
+            }
+        }
     };
     this.checkHit = function(other){
         if (dist(this.x, this.y, other.x, other.y) < (this.size/2)){
@@ -82,7 +94,7 @@ function Player (name, world){
             }
             else {
                 //OTHER IS DELETED
-                this.size+= other.size;
+                this.size++;
                 this.points++;
                 return true;
             }

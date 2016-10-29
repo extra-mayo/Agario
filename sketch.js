@@ -14,7 +14,7 @@ function preload(){
         EXP.push(new Experience(world, player));
     }
     for (var i = 0; i < 3; i++){
-        enemy.push(new Enemy(world, player, EXP, "enemy " + i))
+        enemy.push(new Enemy(world, player, EXP, enemy, "enemy " + i, i))
     }
 }
 
@@ -32,9 +32,6 @@ function draw(){
 
     for (var i = 0; i < EXP.length; i++){
         EXP[i].display();
-        if (player.checkHit(EXP[i]) == true){
-            EXP[i].respawn();
-        }
     }
     player.display();
     console.log(world.offsetX, world.offsetY);
