@@ -33,6 +33,7 @@ function draw(){
     for (var i = 0; i < EXP.length; i++){
         EXP[i].display();
     }
+
     player.display();
     console.log(world.offsetX, world.offsetY);
 }
