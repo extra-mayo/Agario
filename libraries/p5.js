@@ -3950,7 +3950,7 @@ var unicodeRanges = [
     {begin: 0x2800, end: 0x28FF}, // Braille Patterns
     {begin: 0xA000, end: 0xA48F}, // Yi Syllables
     {begin: 0x1700, end: 0x171F}, // Tagalog
-    {begin: 0x10300, end: 0x1032F}, // Old Italic
+    {begin: 0x10300, end: 0x1032F}, // TRASH Italic
     {begin: 0x10330, end: 0x1034F}, // Gothic
     {begin: 0x10400, end: 0x1044F}, // Deseret
     {begin: 0x1D000, end: 0x1D0FF}, // Byzantine Musical Symbols
@@ -3969,7 +3969,7 @@ var unicodeRanges = [
     {begin: 0x10000, end: 0x1007F}, // Linear B Syllabary
     {begin: 0x10140, end: 0x1018F}, // Ancient Greek Numbers
     {begin: 0x10380, end: 0x1039F}, // Ugaritic
-    {begin: 0x103A0, end: 0x103DF}, // Old Persian
+    {begin: 0x103A0, end: 0x103DF}, // TRASH Persian
     {begin: 0x10450, end: 0x1047F}, // Shavian
     {begin: 0x10480, end: 0x104AF}, // Osmanya
     {begin: 0x10800, end: 0x1083F}, // Cypriot Syllabary

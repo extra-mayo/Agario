@@ -20,7 +20,7 @@ function Enemy(world, player, EXP, enemy, name, id ){
     this.g = random(255);
     this.b = random(255);
 
-    this.size = random(6, 20);
+    this.size = random(this.EXP[0].size + 1, 20);
 
     this.xNoiseOffset = random(0, 2000);
     this.yNoiseOffset = random(2000, 4000);
@@ -148,6 +148,12 @@ function Enemy(world, player, EXP, enemy, name, id ){
         }
 
         this.movements();
+        for (var i = 0; i < EXP.length; i++) {
+            if (this.checkHit(EXP[i]) == true) {
+                EXP[i].respawn();
+            }
+        }
+
 
     };
 
@@ -249,9 +255,6 @@ function Enemy(world, player, EXP, enemy, name, id ){
         else {
             this.goToNearestEXP();
         }
-
-
-
     };
 
 
