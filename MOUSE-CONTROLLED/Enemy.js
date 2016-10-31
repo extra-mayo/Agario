@@ -1,19 +1,21 @@
 /**
  * Created by ho on 10/29/2016.
  */
-function Enemy(name, id, EXP, enemy, player, gameStatus) {
+function Enemy(name, id, EXP, enemy, player, gameStatus, haven) {
     this.pos = createVector(random(width), random(height));
     this.EXP = EXP;
     this.id = id;
     this.name = name;
     this.enemy = enemy;
     this.player = player;
+    this.haven = haven;
     this.r = random(255);
     this.g = random(255);
     this.b = random(255);
-    this.radius = random(10, 15);
+    this.radius = 50;
+    // this.radius = random(10, 15);
     this.gameStatus = gameStatus;
-    this.speed = 0.7;
+    this.speed = 1;
 
     this.display = function () {
         imageMode(CENTER);
@@ -30,6 +32,56 @@ function Enemy(name, id, EXP, enemy, player, gameStatus) {
         this.move();
     };
 
+    this.avoidHaven = function () {
+        for (var i = 0; i < this.haven.length; i++) {
+            if (this.radius < this.haven[i].radius) {
+                var d = dist(this.pos.x, this.pos.y, this.haven[i].pos.x, this.haven[i].pos.y);
+
+                if (d < this.haven[i].radius * 2) {
+                    if (this.pos.x < this.haven[i].pos.x) {
+                        this.pos.x -= this.speed;
+                    }
+                    if (this.pos.x > this.haven[i].pos.x) {
+                        this.pos.x += this.speed;
+                    }
+                    if (this.pos.y < this.haven[i].pos.y) {
+                        this.pos.y -= this.speed;
+                    }
+                    if (this.pos.y > this.haven[i].pos.y) {
+                        this.pos.y += this.speed;
+                    }
+                }
+            }
+        }
+    };
+
+    this.goToNearestHaven = function () {
+        smallestDistX = this.haven[0].pos.x;
+        smallestDistY = this.haven[0].pos.y;
+        var smallestDistance = dist(this.pos.x, this.pos.y, this.haven[0].pos.x, this.haven[0].pos.y);
+        for (var i = 1; i < this.haven.length; i++) {
+            var d = dist(this.pos.x, this.pos.y, this.haven[i].pos.x, this.haven[i].pos.y);
+            if (d < smallestDistance) {
+                smallestDistX = this.haven[i].pos.x;
+                smallestDistY = this.haven[i].pos.y;
+            }
+        }
+        if (this.radius < this.haven[0].radius) {
+            if (this.pos.x < smallestDistX) {
+                this.pos.x += this.speed;
+            }
+            if (this.pos.x > smallestDistX) {
+                this.pos.x -= this.speed;
+            }
+            if (this.pos.y < smallestDistY) {
+                this.pos.y += this.speed;
+            }
+            if (this.pos.y > smallestDistY) {
+                this.pos.y -= this.speed;
+            }
+        }
+
+    };
 
     this.goToNearestEXP = function () {
         var smallestX = this.EXP[0].pos.x, smallestY = this.EXP[0].pos.y;
@@ -84,8 +136,20 @@ function Enemy(name, id, EXP, enemy, player, gameStatus) {
     this.movements = function () {
         for (var i = 0; i < this.enemy.length; i++) {
             if (this.enemy[i].id != this.id) {
-                if (dist(this.pos.x, this.pos.y, this.enemy[i].pos.x, this.enemy[i].pos.y) <= (this.enemy[i].radius * 2)) {
+                var greaterRadiusBetweenEnemy = this.radius;
+                if (this.radius < enemy[i].radius) {
+                    greaterRadiusBetweenEnemy = enemy[i].radius;
+                }
+                var greaterRadiusBetweenUser = this.radius;
+                if (this.radius < player.radius) {
+                    greaterRadiusBetweenUser = player.radius;
+                }
+                //If this enemy is within certain distance from other enemies
+                if (dist(this.pos.x, this.pos.y, this.enemy[i].pos.x, this.enemy[i].pos.y) <= (greaterRadiusBetweenEnemy * 2)) {
+                    //and if this enemy's radius is less than other enemy's radius, run away while going to the nearest EXP not near the enemy
                     if (this.radius < enemy[i].radius) {
+                        //if the radius is less than haven's radius, then
+                        this.goToNearestHaven();
                         if (this.pos.x < this.enemy[i].pos.x) {
                             // this.previousX = this.pos.x;
                             this.pos.x -= this.speed;
@@ -103,8 +167,10 @@ function Enemy(name, id, EXP, enemy, player, gameStatus) {
                             // this.previousY = this.pos.y;
                             this.pos.y += this.speed;
                         }
+                        //if not, then just go to nearest EXP;
                         this.goToNearestEXPNotNear(this.enemy[i]);
                     }
+                    //otherwise if this radius is bigger, then chase after the smaller enemy
                     else {
                         if (this.pos.x < this.enemy[i].pos.x) {
                             // this.previousX = this.pos.x;
@@ -125,17 +191,13 @@ function Enemy(name, id, EXP, enemy, player, gameStatus) {
                         }
                     }
                 }
-                else {
-                    this.goToNearestEXP();
-                }
             }
         }
-
-        if (dist(this.pos.x, this.pos.y, this.player.pos.x, this.player.pos.y) <= (this.player.radius * 2)) {
+        if (dist(this.pos.x, this.pos.y, this.player.pos.x, this.player.pos.y) <= (greaterRadiusBetweenUser * 2)) {
             // console.log("CHECK TWO!");
             if (this.radius < this.player.radius) {
+                this.goToNearestHaven();
                 if (this.pos.x < this.player.pos.x) {
-                    // this.previousX = this.pos.x;
                     this.pos.x -= this.speed;
                 }
                 if (this.pos.x > this.player.pos.x) {
@@ -174,6 +236,11 @@ function Enemy(name, id, EXP, enemy, player, gameStatus) {
                 }
             }
         }
+        if (this.radius > this.haven[0].radius) {
+            this.avoidHaven();
+            this.goToNearestEXP();
+        }
+        //if there's no enemy/player within distance
         else {
             this.goToNearestEXP();
         }
@@ -189,12 +256,18 @@ function Enemy(name, id, EXP, enemy, player, gameStatus) {
         var d = dist(this.pos.x, this.pos.y, other.pos.x, other.pos.y);
         if (d < (this.radius / 2)) {
             if (this.radius > other.radius) {
+                if (other.id == "haven") {
+                    return 3;
+                }
                 var newArea = PI * this.radius * this.radius + PI * other.radius + other.radius;
                 this.radius = sqrt(newArea / PI) + 0.2;
                 // console.log(this.radius);
                 return 1;
             }
             else {
+                if (other.id == "haven") {
+                    return 2;
+                }
                 return -1;
             }
         }
@@ -222,8 +295,7 @@ function Enemy(name, id, EXP, enemy, player, gameStatus) {
         if (this.pos.y < 0) {
             this.pos.y = 0;
         }
-        //TODO
-        //better movements
+
         this.movements();
         for (var i = 0; i < EXP.length; i++) {
             if (this.checkHit(EXP[i]) == 1) {
@@ -247,6 +319,12 @@ function Enemy(name, id, EXP, enemy, player, gameStatus) {
         }
         else if (this.checkHit(player) == -1) {
             this.respawn();
+        }
+
+        for (var i = 0; i < this.haven.length; i++) {
+            if (this.checkHit(this.haven[i]) == 3) {
+                this.radius = this.haven[i].radius;
+            }
         }
     }
 

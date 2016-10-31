@@ -2,11 +2,12 @@
  * Created by ho on 10/29/2016.
  */
 
-function Player(name, EXP, gameStatus) {
+function Player(name, EXP, gameStatus, haven) {
     this.pos = createVector(250, 250);
-    this.radius = 10;
+    this.radius = 50;
     this.name = name;
     this.gameStatus = gameStatus;
+    this.haven = haven;
     this.sound = loadSound('../images/suck.mp3');
 
     // randomize our color
@@ -67,24 +68,41 @@ function Player(name, EXP, gameStatus) {
             }
         }
 
+        for (var i = 0; i < this.haven.length; i++) {
+            if (this.checkHit(this.haven[i]) == 3) {
+                this.radius = this.haven[i].radius;
+            }
+        }
+
     };
 
     //check hit values:
     //1 = successfuly eat
     //0 = not within proximity
     //-1 = dead
+    //2 = nothing happens
+    //3 = smaller radius
 
     this.checkHit = function (other) {
         var d = dist(this.pos.x, this.pos.y, other.pos.x, other.pos.y);
         if (d < (this.radius / 2)) {
+            //if player's radius is bigger than other's radius
+            //if player hits a haven and player's radius is bigger, its radius gets smaller
             if (this.radius > other.radius) {
+                if (other.id == "haven") {
+                    return 3;
+                }
                 var newArea = PI * this.radius * this.radius + PI * other.radius + other.radius;
                 this.radius = sqrt(newArea / PI) + 0.2;
                 console.log(this.radius);
                 this.sound.play();
                 return 1;
             }
+            //if player's radius is smaller or equal to than haven's, nothing happens.
             else {
+                if (other.id == "haven") {
+                    return 2;
+                }
                 this.gameStatus = 2;
                 return -1;
             }

@@ -4,6 +4,7 @@ var EXP = [];
 var enemy = [];
 var misc;
 var menuScreen;
+var haven = [];
 
 var gameStatus = 0;
 function preload() {
@@ -15,15 +16,20 @@ function menuInput() {
     var name = document.getElementById("name").value;
     var EXPCount = document.getElementById("expCount").value;
     var enemyCount = document.getElementById("enemyCount").value;
+    var havenCount = document.getElementById("havenCount").value;
 
-    player = new Player(name, EXP);
+    for (var i = 0; i < havenCount; i++) {
+        haven.push(new Haven());
+    }
+    player = new Player(name, EXP, gameStatus, haven);
     for (var i = 0; i < EXPCount; i++) {
         EXP.push(new Experience());
     }
     for (var i = 0; i < enemyCount; i++) {
-        enemy.push(new Enemy("enemy " + i, i, EXP, enemy, player, gameStatus));
+        enemy.push(new Enemy("enemy " + i, i, EXP, enemy, player, gameStatus, haven));
     }
     misc = new Misc(EXP, player, enemy);
+
     gameStatus = 1;
 }
 
@@ -51,10 +57,15 @@ function draw() {
                 gameStatus = 2;
             }
         }
+
         misc.displayScore();
         player.display();
         if (player.gameStatus == 2) {
             gameStatus = 2;
+        }
+
+        for (var i = 0; i < haven.length; i++) {
+            haven[i].display();
         }
     }
     else if (gameStatus == 2) {

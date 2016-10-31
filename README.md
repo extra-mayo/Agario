@@ -1,4 +1,4 @@
-#Agar.io Clone 
+#Discounted version of Agar.io 
 
 *this was mainly created using p5.js*
 

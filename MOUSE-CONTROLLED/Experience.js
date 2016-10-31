@@ -17,7 +17,7 @@ function Experience() {
         beginShape();
         var xOffset = 0;
         for (var a = 0; a < TWO_PI; a += 0.1) {
-            var offset = map(noise(xOffset, yOffset), 0, 1, -2, 2);
+            var offset = map(noise(xOffset, yOffset), 0, 1, -2, 1);
             var r = this.radius + offset;
             var x = r * cos(a);
             var y = r * sin(a);
