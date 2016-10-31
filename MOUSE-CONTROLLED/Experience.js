@@ -4,7 +4,7 @@
 var yOffset = 0;
 function Experience() {
     this.pos = createVector(random(width), random(728));
-    this.radius = 20;
+    this.radius = 8;
     this.r = random(0, 255);
     this.g = random(0, 255);
     this.b = random(0, 255);
@@ -17,7 +17,7 @@ function Experience() {
         beginShape();
         var xOffset = 0;
         for (var a = 0; a < TWO_PI; a += 0.1) {
-            var offset = map(noise(xOffset, yOffset), 0, 1, -2, 0);
+            var offset = map(noise(xOffset, yOffset), 0, 1, -2, 2);
             var r = this.radius + offset;
             var x = r * cos(a);
             var y = r * sin(a);

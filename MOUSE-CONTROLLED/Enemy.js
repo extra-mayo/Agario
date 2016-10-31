@@ -1,8 +1,8 @@
 /**
  * Created by ho on 10/29/2016.
  */
-function Enemy(name, id, EXP, enemy, player) {
-    this.pos = createVector(random(500), random(500));
+function Enemy(name, id, EXP, enemy, player, gameStatus) {
+    this.pos = createVector(random(width), random(height));
     this.EXP = EXP;
     this.id = id;
     this.name = name;
@@ -11,8 +11,9 @@ function Enemy(name, id, EXP, enemy, player) {
     this.r = random(255);
     this.g = random(255);
     this.b = random(255);
-    this.radius = random(21, 30);
-    this.speed = 0.75;
+    this.radius = random(10, 15);
+    this.gameStatus = gameStatus;
+    this.speed = 0.7;
 
     this.display = function () {
         imageMode(CENTER);
@@ -189,11 +190,12 @@ function Enemy(name, id, EXP, enemy, player) {
         if (d < (this.radius / 2)) {
             if (this.radius > other.radius) {
                 var newArea = PI * this.radius * this.radius + PI * other.radius + other.radius;
-                this.radius = sqrt(newArea / PI) + 1;
+                this.radius = sqrt(newArea / PI) + 0.2;
                 // console.log(this.radius);
                 return 1;
             }
             else {
+                this.gameStatus = 2;
                 return -1;
             }
         }
@@ -243,6 +245,7 @@ function Enemy(name, id, EXP, enemy, player) {
             //TODO
             //PLAYER LOSES
             console.log("YOU LOSE!");
+            this.gameStatus = 2;
         }
         else if (this.checkHit(player) == -1) {
             this.respawn();

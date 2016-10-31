@@ -49,7 +49,7 @@ function Misc(EXP, player, enemy) {
 
     this.setCenter = function () {
         translate(width / 2, height / 2);
-        scale(50 / this.player.radius);
+        scale((20 + (this.player.radius * 0.5)) / (this.player.radius * 0.9));
         translate(-this.player.pos.x, -this.player.pos.y);
     }
 

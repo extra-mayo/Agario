@@ -2,10 +2,11 @@
  * Created by ho on 10/29/2016.
  */
 
-function Player(name, EXP) {
+function Player(name, EXP, gameStatus) {
     this.pos = createVector(250, 250);
-    this.radius = 30;
+    this.radius = 10;
     this.name = name;
+    this.gameStatus = gameStatus;
 
     // randomize our color
     this.r = random(255);
@@ -78,11 +79,12 @@ function Player(name, EXP) {
         if (d < (this.radius / 2)) {
             if (this.radius > other.radius) {
                 var newArea = PI * this.radius * this.radius + PI * other.radius + other.radius;
-                this.radius = sqrt(newArea / PI) + 1;
+                this.radius = sqrt(newArea / PI) + 0.2;
                 console.log(this.radius);
                 return 1;
             }
             else {
+                this.gameStatus = 2;
                 return -1;
             }
         }
