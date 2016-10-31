@@ -2,18 +2,18 @@
  * Created by ho on 10/29/2016.
  */
 
-function Player(name, EXP, world) {
+function Player(name, EXP) {
     this.pos = createVector(250, 250);
     this.radius = 30;
     this.name = name;
-    this.world = world;
+
     // randomize our color
     this.r = random(255);
     this.g = random(255);
     this.b = random(255);
 
-
     this.display = function () {
+
         fill(255);
         imageMode(CENTER);
         smooth();
@@ -27,25 +27,13 @@ function Player(name, EXP, world) {
         textAlign(CENTER);
         text(this.name, this.pos.x, this.pos.y);
         this.move();
+
     };
 
     this.move = function () {
 
         var mousePos = createVector(mouseX - width / 2, mouseY - height / 2);
-
         mousePos.setMag(3);
-        if (mousePos.x < this.pos.x) {
-            this.world.moveRight(mag(mousePos));
-        }
-        if (mousePos.x > this.pos.x) {
-            this.world.moveLeft(mag(mousePos));
-        }
-        if (mousePos.y < this.pos.y) {
-            this.world.moveDown(mag(mousePos));
-        }
-        if (mousePos.y > this.pos.y) {
-            this.world.moveUp(mag(mousePos));
-        }
         this.pos.add(mousePos);
 
 
@@ -90,7 +78,7 @@ function Player(name, EXP, world) {
         if (d < (this.radius / 2)) {
             if (this.radius > other.radius) {
                 var newArea = PI * this.radius * this.radius + PI * other.radius + other.radius;
-                this.radius = sqrt(newArea / PI);
+                this.radius = sqrt(newArea / PI) + 1;
                 console.log(this.radius);
                 return 1;
             }
@@ -102,4 +90,6 @@ function Player(name, EXP, world) {
             return 0;
         }
     };
+
+
 }

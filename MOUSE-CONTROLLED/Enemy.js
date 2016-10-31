@@ -12,7 +12,7 @@ function Enemy(name, id, EXP, enemy, player) {
     this.g = random(255);
     this.b = random(255);
     this.radius = random(21, 30);
-    this.speed = 1;
+    this.speed = 0.75;
 
     this.display = function () {
         imageMode(CENTER);
@@ -59,7 +59,7 @@ function Enemy(name, id, EXP, enemy, player) {
         for (var i = 0; i < this.EXP.length; i++) {
             if (dist(this.pos.x, this.pos.y, this.EXP[i].pos.x, this.EXP[i].pos.y) < dist(this.pos.x, this.pos.y, smallestX, smallestY)
                 &&
-                dist(other.pos.x, other.pos.y, this.EXP[i].pos.x, this.EXP[i].pos.y) > (other.radius + 30)) {
+                dist(other.pos.x, other.pos.y, this.EXP[i].pos.x, this.EXP[i].pos.y) > (other.radius * 2)) {
                 smallestX = this.EXP[i].pos.x;
                 smallestY = this.EXP[i].pos.y;
             }
@@ -83,7 +83,7 @@ function Enemy(name, id, EXP, enemy, player) {
     this.movements = function () {
         for (var i = 0; i < this.enemy.length; i++) {
             if (this.enemy[i].id != this.id) {
-                if (dist(this.pos.x, this.pos.y, this.enemy[i].pos.x, this.enemy[i].pos.y) <= (this.enemy[i].radius + 20)) {
+                if (dist(this.pos.x, this.pos.y, this.enemy[i].pos.x, this.enemy[i].pos.y) <= (this.enemy[i].radius * 2)) {
                     if (this.radius < enemy[i].radius) {
                         if (this.pos.x < this.enemy[i].pos.x) {
                             // this.previousX = this.pos.x;
@@ -130,7 +130,7 @@ function Enemy(name, id, EXP, enemy, player) {
             }
         }
 
-        if (dist(this.pos.x, this.pos.y, this.player.pos.x, this.player.pos.y) <= (this.player.radius + 20)) {
+        if (dist(this.pos.x, this.pos.y, this.player.pos.x, this.player.pos.y) <= (this.player.radius * 2)) {
             // console.log("CHECK TWO!");
             if (this.radius < this.player.radius) {
                 if (this.pos.x < this.player.pos.x) {
@@ -189,7 +189,7 @@ function Enemy(name, id, EXP, enemy, player) {
         if (d < (this.radius / 2)) {
             if (this.radius > other.radius) {
                 var newArea = PI * this.radius * this.radius + PI * other.radius + other.radius;
-                this.radius = sqrt(newArea / PI);
+                this.radius = sqrt(newArea / PI) + 1;
                 // console.log(this.radius);
                 return 1;
             }

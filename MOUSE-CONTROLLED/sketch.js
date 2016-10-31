@@ -1,39 +1,37 @@
-/**
- * Created by ho on 10/20/2016.
- */
 
 var player;
 var EXP = [];
 var enemy = [];
-var world;
-
+var misc;
 function preload() {
-    world = new World();
-    player = new Player("ho", EXP, world);
+    player = new Player("ho", EXP);
     for (var i = 0; i < 10; i++) {
         EXP.push(new Experience());
     }
     for (var i = 0; i < 3; i++) {
         enemy.push(new Enemy("enemy " + i, i, EXP, enemy, player));
     }
+    misc = new Misc(EXP, player, enemy);
 }
 
 function setup() {
-    createCanvas(500, 500);
+    createCanvas(1000, 720);
 }
 
 function draw() {
-    background(0);
-    world.displayWorld();
-    translate(width / 2, height / 2);
-    scale(30 / player.radius);
-    translate(-player.pos.x, -player.pos.y);
+    background(255);
+
+    misc.setCenter();
+    misc.displayWorld();
+
     for (var i = 0; i < EXP.length; i++) {
         EXP[i].display();
     }
     for (var i = 0; i < enemy.length; i++) {
         enemy[i].display();
     }
+
+    misc.displayScore();
     player.display();
-    console.log(world.offsetX, world.offsetY);
+
 }
