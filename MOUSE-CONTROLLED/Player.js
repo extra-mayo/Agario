@@ -7,6 +7,7 @@ function Player(name, EXP, gameStatus) {
     this.radius = 10;
     this.name = name;
     this.gameStatus = gameStatus;
+    this.sound = loadSound('../images/suck.mp3');
 
     // randomize our color
     this.r = random(255);
@@ -24,7 +25,7 @@ function Player(name, EXP, gameStatus) {
         fill(this.r, this.g, this.b);
         ellipse(this.pos.x, this.pos.y, this.radius, this.radius);
         noStroke();
-        fill(0);
+        fill(255);
         textAlign(CENTER);
         text(this.name, this.pos.x, this.pos.y);
         this.move();
@@ -61,8 +62,7 @@ function Player(name, EXP, gameStatus) {
                 enemy[i].respawn();
             }
             else if (this.checkHit(enemy[i]) == -1) {
-                //TODO
-                //PLAYER LOSES
+                this.gameStatus = 2;
                 console.log("YOU LOSE!");
             }
         }
@@ -81,6 +81,7 @@ function Player(name, EXP, gameStatus) {
                 var newArea = PI * this.radius * this.radius + PI * other.radius + other.radius;
                 this.radius = sqrt(newArea / PI) + 0.2;
                 console.log(this.radius);
+                this.sound.play();
                 return 1;
             }
             else {

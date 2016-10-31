@@ -13,10 +13,10 @@ function Misc(EXP, player, enemy) {
     ;
 
 
-    this.worldImage = loadImage("../images/background.png");
+    this.worldImage = loadImage("../images/spaceBackground.jpg");
     this.displayWorld = function () {
         imageMode(CENTER);
-        image(this.worldImage, width / 2, height / 2, width, height);
+        image(this.worldImage, width / 2, height / 2, 1300, 800);
     };
 
     this.updateOrder = function () {

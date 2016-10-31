@@ -24,7 +24,7 @@ function Enemy(name, id, EXP, enemy, player, gameStatus) {
         fill(this.r, this.g, this.b);
         ellipse(this.pos.x, this.pos.y, this.radius, this.radius);
         noStroke();
-        fill(0);
+        fill(255);
         textAlign(CENTER);
         text(this.name, this.pos.x, this.pos.y);
         this.move();
@@ -195,7 +195,6 @@ function Enemy(name, id, EXP, enemy, player, gameStatus) {
                 return 1;
             }
             else {
-                this.gameStatus = 2;
                 return -1;
             }
         }
@@ -223,7 +222,8 @@ function Enemy(name, id, EXP, enemy, player, gameStatus) {
         if (this.pos.y < 0) {
             this.pos.y = 0;
         }
-
+        //TODO
+        //better movements
         this.movements();
         for (var i = 0; i < EXP.length; i++) {
             if (this.checkHit(EXP[i]) == 1) {
@@ -242,8 +242,6 @@ function Enemy(name, id, EXP, enemy, player, gameStatus) {
             }
         }
         if (this.checkHit(player) == 1) {
-            //TODO
-            //PLAYER LOSES
             console.log("YOU LOSE!");
             this.gameStatus = 2;
         }

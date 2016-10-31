@@ -39,7 +39,7 @@ function draw() {
     //1 - Game started
     //2 - Game ends
     if (gameStatus == 1) {
-        background(255);
+        background(0);
         misc.setCenter();
         misc.displayWorld();
         for (var i = 0; i < EXP.length; i++) {
@@ -58,7 +58,14 @@ function draw() {
         }
     }
     else if (gameStatus == 2) {
-
+        scale(1);
+        fill(255)
+        rect(250, 250, 100, 100);
+        textAlign(CENTER);
+        fill(0);
+        textSize(16);
+        textLeading(5);
+        text("you died.", 300, 300);
     }
 
 }
