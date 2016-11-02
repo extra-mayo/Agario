@@ -145,7 +145,7 @@ function Enemy(name, id, EXP, enemy, player, gameStatus, haven) {
                     greaterRadiusBetweenUser = player.radius;
                 }
                 //If this enemy is within certain distance from other enemies
-                if (dist(this.pos.x, this.pos.y, this.enemy[i].pos.x, this.enemy[i].pos.y) <= (greaterRadiusBetweenEnemy * 2)) {
+                if (dist(this.pos.x, this.pos.y, this.enemy[i].pos.x, this.enemy[i].pos.y) <= (greaterRadiusBetweenEnemy * 4)) {
                     //and if this enemy's radius is less than other enemy's radius, run away while going to the nearest EXP not near the enemy
                     if (this.radius < enemy[i].radius) {
                         //if the radius is less than haven's radius, then
@@ -193,10 +193,10 @@ function Enemy(name, id, EXP, enemy, player, gameStatus, haven) {
                 }
             }
         }
-        if (dist(this.pos.x, this.pos.y, this.player.pos.x, this.player.pos.y) <= (greaterRadiusBetweenUser * 2)) {
+        if (dist(this.pos.x, this.pos.y, this.player.pos.x, this.player.pos.y) <= (greaterRadiusBetweenUser * 4)) {
             // console.log("CHECK TWO!");
             if (this.radius < this.player.radius) {
-                this.goToNearestHaven();
+                // this.goToNearestHaven();
                 if (this.pos.x < this.player.pos.x) {
                     this.pos.x -= this.speed;
                 }

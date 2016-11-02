@@ -77,6 +77,17 @@ function draw() {
         textSize(16);
         textLeading(5);
         text("you died.", 300, 300);
+        text("C to cont.", 300, 320);
+        if (keyIsDown(67)){
+            gameStatus = 1;
+            player.gameStatus = 1;
+            for (var i = 0; i < enemy.length; i++){
+                if (enemy[i].gameStatus == 2){
+                    enemy[i].pos = createVector(random(500), random(500));
+                }
+                enemy[i].gameStatus = 1;
+            }
+        }
     }
 
 }
